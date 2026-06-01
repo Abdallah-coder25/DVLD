@@ -34,7 +34,7 @@
             // ctrUser1
             // 
             this.ctrUser1.BackColor = System.Drawing.Color.White;
-            this.ctrUser1.Location = new System.Drawing.Point(3, 2);
+            this.ctrUser1.Location = new System.Drawing.Point(11, -2);
             this.ctrUser1.Name = "ctrUser1";
             this.ctrUser1.Size = new System.Drawing.Size(725, 647);
             this.ctrUser1.TabIndex = 0;
@@ -44,7 +44,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(732, 657);
+            this.ClientSize = new System.Drawing.Size(747, 657);
             this.Controls.Add(this.ctrUser1);
             this.Name = "ModeOfUser";
             this.Text = "ModeOfUser";

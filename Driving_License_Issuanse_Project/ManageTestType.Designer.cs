@@ -47,7 +47,7 @@
             this.lbNumber.AutoSize = true;
             this.lbNumber.Font = new System.Drawing.Font("Cascadia Code", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
             this.lbNumber.ForeColor = System.Drawing.Color.Black;
-            this.lbNumber.Location = new System.Drawing.Point(208, 438);
+            this.lbNumber.Location = new System.Drawing.Point(118, 458);
             this.lbNumber.Name = "lbNumber";
             this.lbNumber.Size = new System.Drawing.Size(28, 21);
             this.lbNumber.TabIndex = 10;
@@ -58,7 +58,7 @@
             this.lbRecord.AutoSize = true;
             this.lbRecord.Font = new System.Drawing.Font("Cascadia Code", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
             this.lbRecord.ForeColor = System.Drawing.Color.Black;
-            this.lbRecord.Location = new System.Drawing.Point(82, 438);
+            this.lbRecord.Location = new System.Drawing.Point(12, 458);
             this.lbRecord.Name = "lbRecord";
             this.lbRecord.Size = new System.Drawing.Size(100, 21);
             this.lbRecord.TabIndex = 9;
@@ -67,11 +67,11 @@
             // lbTitle
             // 
             this.lbTitle.AutoSize = true;
-            this.lbTitle.Font = new System.Drawing.Font("Cascadia Code", 10F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
+            this.lbTitle.Font = new System.Drawing.Font("Cascadia Code", 16F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
             this.lbTitle.ForeColor = System.Drawing.Color.Black;
-            this.lbTitle.Location = new System.Drawing.Point(179, 23);
+            this.lbTitle.Location = new System.Drawing.Point(325, 9);
             this.lbTitle.Name = "lbTitle";
-            this.lbTitle.Size = new System.Drawing.Size(204, 27);
+            this.lbTitle.Size = new System.Drawing.Size(323, 43);
             this.lbTitle.TabIndex = 7;
             this.lbTitle.Text = "Manage Test Type";
             // 
@@ -80,11 +80,11 @@
             this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
-            this.dataGridView1.Location = new System.Drawing.Point(73, 147);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 160);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 29;
-            this.dataGridView1.Size = new System.Drawing.Size(1257, 276);
+            this.dataGridView1.Size = new System.Drawing.Size(1034, 276);
             this.dataGridView1.TabIndex = 6;
             // 
             // contextMenuStrip1
@@ -108,9 +108,9 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.White;
             this.pictureBox1.Image = global::Driving_License_Issuanse_Project.Properties.Resources.Test_Type_64;
-            this.pictureBox1.Location = new System.Drawing.Point(419, 23);
+            this.pictureBox1.Location = new System.Drawing.Point(391, 68);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(128, 97);
+            this.pictureBox1.Size = new System.Drawing.Size(140, 77);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 8;
             this.pictureBox1.TabStop = false;
@@ -120,7 +120,7 @@
             this.btnClose.BackColor = System.Drawing.Color.Black;
             this.btnClose.BackgroundImage = global::Driving_License_Issuanse_Project.Properties.Resources.cross_64;
             this.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnClose.Location = new System.Drawing.Point(1258, 429);
+            this.btnClose.Location = new System.Drawing.Point(827, 458);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(72, 38);
             this.btnClose.TabIndex = 30;
@@ -132,7 +132,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1356, 479);
+            this.ClientSize = new System.Drawing.Size(1072, 505);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.lbNumber);
             this.Controls.Add(this.lbRecord);

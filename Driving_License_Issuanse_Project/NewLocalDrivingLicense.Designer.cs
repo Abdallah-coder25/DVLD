@@ -37,7 +37,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 16F);
-            this.label1.Location = new System.Drawing.Point(169, 9);
+            this.label1.Location = new System.Drawing.Point(180, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(385, 39);
             this.label1.TabIndex = 1;
@@ -57,7 +57,7 @@
             // ctrLocalDrivingLicense1
             // 
             this.ctrLocalDrivingLicense1.BackColor = System.Drawing.Color.White;
-            this.ctrLocalDrivingLicense1.Location = new System.Drawing.Point(276, 51);
+            this.ctrLocalDrivingLicense1.Location = new System.Drawing.Point(12, 51);
             this.ctrLocalDrivingLicense1.Name = "ctrLocalDrivingLicense1";
             this.ctrLocalDrivingLicense1.Size = new System.Drawing.Size(727, 630);
             this.ctrLocalDrivingLicense1.TabIndex = 4;
@@ -67,7 +67,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1039, 761);
+            this.ClientSize = new System.Drawing.Size(753, 698);
             this.Controls.Add(this.ctrLocalDrivingLicense1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);

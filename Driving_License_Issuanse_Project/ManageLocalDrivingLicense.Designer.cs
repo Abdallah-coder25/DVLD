@@ -124,7 +124,7 @@
             this.datagridview1.Name = "datagridview1";
             this.datagridview1.RowHeadersWidth = 62;
             this.datagridview1.RowTemplate.Height = 29;
-            this.datagridview1.Size = new System.Drawing.Size(1384, 350);
+            this.datagridview1.Size = new System.Drawing.Size(1116, 350);
             this.datagridview1.TabIndex = 21;
             this.datagridview1.SelectionChanged += new System.EventHandler(this.datagridview1_SelectionChanged);
             // 
@@ -141,13 +141,15 @@
             this.sToolStripMenuItem,
             this.showPersonLicenseHistoryToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(339, 293);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(339, 260);
             // 
             // showApplicationDetailsToolStripMenuItem
             // 
+            this.showApplicationDetailsToolStripMenuItem.Image = global::Driving_License_Issuanse_Project.Properties.Resources.Applications_64;
             this.showApplicationDetailsToolStripMenuItem.Name = "showApplicationDetailsToolStripMenuItem";
             this.showApplicationDetailsToolStripMenuItem.Size = new System.Drawing.Size(338, 32);
             this.showApplicationDetailsToolStripMenuItem.Text = "Show Application Details";
+            this.showApplicationDetailsToolStripMenuItem.Click += new System.EventHandler(this.showApplicationDetailsToolStripMenuItem_Click);
             // 
             // editApplicationToolStripMenuItem
             // 
@@ -155,6 +157,7 @@
             this.editApplicationToolStripMenuItem.Name = "editApplicationToolStripMenuItem";
             this.editApplicationToolStripMenuItem.Size = new System.Drawing.Size(338, 32);
             this.editApplicationToolStripMenuItem.Text = "Edit Application";
+            this.editApplicationToolStripMenuItem.Click += new System.EventHandler(this.editApplicationToolStripMenuItem_Click);
             // 
             // deleteApplicationToolStripMenuItem
             // 
@@ -162,6 +165,7 @@
             this.deleteApplicationToolStripMenuItem.Name = "deleteApplicationToolStripMenuItem";
             this.deleteApplicationToolStripMenuItem.Size = new System.Drawing.Size(338, 32);
             this.deleteApplicationToolStripMenuItem.Text = "Delete Application";
+            this.deleteApplicationToolStripMenuItem.Click += new System.EventHandler(this.deleteApplicationToolStripMenuItem_Click);
             // 
             // cancelApplicationToolStripMenuItem
             // 
@@ -217,6 +221,7 @@
             this.sToolStripMenuItem.Name = "sToolStripMenuItem";
             this.sToolStripMenuItem.Size = new System.Drawing.Size(338, 32);
             this.sToolStripMenuItem.Text = "Show License ";
+            this.sToolStripMenuItem.Click += new System.EventHandler(this.sToolStripMenuItem_Click);
             // 
             // showPersonLicenseHistoryToolStripMenuItem
             // 
@@ -224,13 +229,14 @@
             this.showPersonLicenseHistoryToolStripMenuItem.Name = "showPersonLicenseHistoryToolStripMenuItem";
             this.showPersonLicenseHistoryToolStripMenuItem.Size = new System.Drawing.Size(338, 32);
             this.showPersonLicenseHistoryToolStripMenuItem.Text = "Show Person License History";
+            this.showPersonLicenseHistoryToolStripMenuItem.Click += new System.EventHandler(this.showPersonLicenseHistoryToolStripMenuItem_Click);
             // 
             // lbTitle
             // 
             this.lbTitle.AutoSize = true;
             this.lbTitle.Font = new System.Drawing.Font("Cascadia Code", 16F, System.Drawing.FontStyle.Italic);
             this.lbTitle.ForeColor = System.Drawing.Color.Black;
-            this.lbTitle.Location = new System.Drawing.Point(109, 26);
+            this.lbTitle.Location = new System.Drawing.Point(265, 9);
             this.lbTitle.Name = "lbTitle";
             this.lbTitle.Size = new System.Drawing.Size(646, 43);
             this.lbTitle.TabIndex = 20;
@@ -241,7 +247,7 @@
             this.btnClose.BackColor = System.Drawing.Color.Black;
             this.btnClose.BackgroundImage = global::Driving_License_Issuanse_Project.Properties.Resources.cross_64;
             this.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnClose.Location = new System.Drawing.Point(1324, 603);
+            this.btnClose.Location = new System.Drawing.Point(1056, 603);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(72, 38);
             this.btnClose.TabIndex = 28;
@@ -253,7 +259,7 @@
             this.btnAdd.BackColor = System.Drawing.Color.Black;
             this.btnAdd.BackgroundImage = global::Driving_License_Issuanse_Project.Properties.Resources.New_Application_64;
             this.btnAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnAdd.Location = new System.Drawing.Point(1324, 202);
+            this.btnAdd.Location = new System.Drawing.Point(1056, 200);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(72, 35);
             this.btnAdd.TabIndex = 24;
@@ -264,9 +270,9 @@
             // 
             this.pbMangePeople.BackColor = System.Drawing.Color.White;
             this.pbMangePeople.Image = global::Driving_License_Issuanse_Project.Properties.Resources.Applications_64;
-            this.pbMangePeople.Location = new System.Drawing.Point(493, 84);
+            this.pbMangePeople.Location = new System.Drawing.Point(434, 78);
             this.pbMangePeople.Name = "pbMangePeople";
-            this.pbMangePeople.Size = new System.Drawing.Size(225, 99);
+            this.pbMangePeople.Size = new System.Drawing.Size(219, 101);
             this.pbMangePeople.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbMangePeople.TabIndex = 19;
             this.pbMangePeople.TabStop = false;
@@ -276,7 +282,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1423, 653);
+            this.ClientSize = new System.Drawing.Size(1140, 653);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.txSearch);
             this.Controls.Add(this.lbNumber);

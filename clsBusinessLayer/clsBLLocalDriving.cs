@@ -18,5 +18,9 @@ namespace clsBusinessLayer
         {
             return clsDAL.GetPassedTest(id);
         }
+        public static bool DeleteApplication(int LDLID)
+        {
+            return clsDAL.DeleteApplication(LDLID);
+        }
     }
 }

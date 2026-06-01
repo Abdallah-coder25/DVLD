@@ -48,22 +48,25 @@ namespace Driving_License_Issuanse_Project
         }
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if (IsEmpty() || !(clsBLUser.FoundUserActive(txName.Text, txPassword.Text)))
+            if (IsEmpty() || !clsBLUser.FoundUserActive(txName.Text, txPassword.Text))
             {
-                MessageBox.Show("Invalid username or password or not active", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Invalid username or password or not active",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 return;
             }
+
+            clsCurrentUser.currentuser =
+                clsBLUser.CurrentUser(txName.Text, txPassword.Text);
+
+            if (checkBox1.Checked)
+                _SaveUser();
             else
-            {
-                clsCurrentUser.currentuser = clsBLUser.CurrentUser(txName.Text, txPassword.Text);
-                if (checkBox1.Checked)
-                    _SaveUser();
-                else
-                    _DeleteUser();
-                this.Hide();
-                MainForm frm = new MainForm(this);
-                frm.ShowDialog();
-            }
+                _DeleteUser();
+
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
         private void LoginScreen_Load(object sender, EventArgs e)
         {

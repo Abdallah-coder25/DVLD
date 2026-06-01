@@ -69,13 +69,14 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridView1.Location = new System.Drawing.Point(39, 279);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 29;
-            this.dataGridView1.Size = new System.Drawing.Size(1675, 378);
+            this.dataGridView1.Size = new System.Drawing.Size(1250, 378);
             this.dataGridView1.TabIndex = 2;
             // 
             // contextMenuStrip1
@@ -160,9 +161,9 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Driving_License_Issuanse_Project.Properties.Resources.Manage_People;
-            this.pictureBox1.Location = new System.Drawing.Point(779, 79);
+            this.pictureBox1.Location = new System.Drawing.Point(599, 84);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(281, 138);
+            this.pictureBox1.Size = new System.Drawing.Size(203, 109);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 15;
             this.pictureBox1.TabStop = false;
@@ -171,7 +172,7 @@
             // 
             this.btnClose.BackgroundImage = global::Driving_License_Issuanse_Project.Properties.Resources.cross_32;
             this.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnClose.Location = new System.Drawing.Point(1632, 663);
+            this.btnClose.Location = new System.Drawing.Point(1207, 667);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(82, 35);
             this.btnClose.TabIndex = 14;
@@ -182,7 +183,7 @@
             // 
             this.btnAdd.BackgroundImage = global::Driving_License_Issuanse_Project.Properties.Resources.Add_Person_40;
             this.btnAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnAdd.Location = new System.Drawing.Point(1632, 236);
+            this.btnAdd.Location = new System.Drawing.Point(1207, 225);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(82, 35);
             this.btnAdd.TabIndex = 3;
@@ -194,7 +195,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1728, 730);
+            this.ClientSize = new System.Drawing.Size(1309, 730);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.lbNumber);

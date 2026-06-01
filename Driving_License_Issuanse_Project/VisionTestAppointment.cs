@@ -134,7 +134,7 @@ namespace Driving_License_Issuanse_Project
             }
             int localDrivingId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["LocalDrivingLicenseApplicationID"].Value);
 
-            if(clsBLTest.NotYetTested(TestAppointment) || clsBLTest.HasFailedInTest(localDrivingId, (int)clsBLApllicationType.ApplicationType.NewInternationalLicense))
+            if (clsBLTest.NotYetTested(TestAppointment) || clsBLTest.HasFailedInTest(localDrivingId, TypeTest))
             {
                 SetTakeResult test = new SetTakeResult(TestAppointment,TypeTest);
                 test.ShowDialog();

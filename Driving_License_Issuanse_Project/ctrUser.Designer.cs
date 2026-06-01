@@ -604,7 +604,7 @@
             // 
             this.btnSave.BackColor = System.Drawing.Color.White;
             this.btnSave.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.btnSave.Location = new System.Drawing.Point(568, 578);
+            this.btnSave.Location = new System.Drawing.Point(552, 574);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(164, 43);
             this.btnSave.TabIndex = 7;
@@ -617,7 +617,7 @@
             // 
             this.btnClose.BackColor = System.Drawing.Color.White;
             this.btnClose.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.btnClose.Location = new System.Drawing.Point(388, 578);
+            this.btnClose.Location = new System.Drawing.Point(361, 574);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(167, 43);
             this.btnClose.TabIndex = 8;
@@ -643,7 +643,7 @@
             // pictureBox2
             // 
             this.pictureBox2.Image = global::Driving_License_Issuanse_Project.Properties.Resources.Save_32;
-            this.pictureBox2.Location = new System.Drawing.Point(709, 588);
+            this.pictureBox2.Location = new System.Drawing.Point(680, 588);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(19, 22);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -653,7 +653,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Driving_License_Issuanse_Project.Properties.Resources.Close_32;
-            this.pictureBox1.Location = new System.Drawing.Point(522, 588);
+            this.pictureBox1.Location = new System.Drawing.Point(495, 588);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(19, 22);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;

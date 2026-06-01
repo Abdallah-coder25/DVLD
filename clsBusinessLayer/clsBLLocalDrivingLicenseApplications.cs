@@ -37,5 +37,13 @@ namespace clsBusinessLayer
             else
                 return null;
         }
+        public static int GetLocalLicenseID(int AppID,int LCID)
+        {
+            return clsDAL.LocalLicneseIDByAppIDAndLicenseClassID(AppID, LCID);
+        }
+        public static bool UpdateOldLicenseClasse(int id,int LCID)
+        {
+            return clsDAL.UpdatedLicenseClass(id, LCID);
+        }
     }
 }

@@ -47,5 +47,9 @@ namespace clsBusinessLayer
         {
             return clsDAL.UpdateInfoforTestType(id, type, Description, fees);
         }
+        public static int GetTrial(int LDID, int TestTypeID)
+        {
+            return clsDAL.GetTrial(LDID, TestTypeID);
+        }
     }
 }

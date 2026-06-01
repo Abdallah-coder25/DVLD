@@ -39,9 +39,9 @@ namespace clsBusinessLayer
         {
             return clsDAL.GetLicenseClasses();
         }
-        public static int GetLicenseClassID(string className)
+        public static int GetLicenseClassIDByName(string className)
         {
-            return clsDAL.GetLicenseClassID(className);
+            return clsDAL.GetLicenseClassIDByName(className);
         }
         public static string GetLicenseName(int Id)
         {

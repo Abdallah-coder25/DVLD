@@ -96,7 +96,6 @@ namespace Driving_License_Issuanse_Project
             {
                 cbActive.Visible = false;
                 textBox1.Visible = false;
-                dtUsers.DefaultView.RowFilter = "";
             }
             else
             {

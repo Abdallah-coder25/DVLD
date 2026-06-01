@@ -37,14 +37,14 @@
             this.ctrPerson1.id = 0;
             this.ctrPerson1.Location = new System.Drawing.Point(-4, 2);
             this.ctrPerson1.Name = "ctrPerson1";
-            this.ctrPerson1.Size = new System.Drawing.Size(849, 546);
+            this.ctrPerson1.Size = new System.Drawing.Size(845, 546);
             this.ctrPerson1.TabIndex = 0;
             // 
             // ModeOfPerosn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(844, 547);
+            this.ClientSize = new System.Drawing.Size(860, 563);
             this.Controls.Add(this.ctrPerson1);
             this.Name = "ModeOfPerosn";
             this.Text = "ModeOfPerosn";

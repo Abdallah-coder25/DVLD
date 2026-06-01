@@ -33,6 +33,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,7 +45,9 @@
   <ItemGroup>
     <Compile Include="clsBLApplication.cs" />
     <Compile Include="clsBLApllicationType.cs" />
+    <Compile Include="clsBLDetailsDetain.cs" />
     <Compile Include="clsBLDrivers.cs" />
+    <Compile Include="clsBLInternationalLiceneses.cs" />
     <Compile Include="clsBLLicense.cs" />
     <Compile Include="clsBLLicenseClasses.cs" />
     <Compile Include="clsBLLocalDriving.cs" />
@@ -54,6 +58,8 @@
     <Compile Include="clsBLUser.cs" />
     <Compile Include="clsCurrentUser.cs" />
     <Compile Include="clsBLLocalDrivingLicenseApplications.cs" />
+    <Compile Include="clsDetialsDrivers.cs" />
+    <Compile Include="clsBLDetainedLicenses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

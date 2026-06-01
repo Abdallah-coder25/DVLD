@@ -206,11 +206,11 @@ namespace Driving_License_Issuanse_Project
         }
         private void btnClose_Click(object sender, EventArgs e)
         {
-            Reset();
-            btnSave.Enabled = false;
+            this.FindForm().Close();
         }
         private int CreateApplication()
         {
+
             int appTypeID = (int)clsBLApllicationType.ApplicationType.NewLocalDrivingLicense;
             decimal fees = clsBLApllicationType.GetInformation(appTypeID).fees;
             DateTime dateDuringCreate = DateTime.Now;
@@ -231,7 +231,7 @@ namespace Driving_License_Issuanse_Project
 
             if (clsBLApplication.HasActiveApplication(_Person.id,licenseClassID))
             {
-                 MessageBox.Show("This person already has an active application of this License Class");
+                 MessageBox.Show("This person already has a pre_application of this License Class");
                  return;
             }
 

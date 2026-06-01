@@ -5,9 +5,11 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static clsBusinessLayer.clsBLApllicationType;
 using static clsBusinessLayer.clsBLTestType;
 
 namespace Driving_License_Issuanse_Project
@@ -48,6 +50,8 @@ namespace Driving_License_Issuanse_Project
             lbName.Text = $"{person.firstname + " " + person.secondname + " " + person.lastname}";
             lbDate.Text = testAppointment.AppointmentDate.ToString();
             lbFees.Text = testType.fees.ToString();
+            int count = clsBLTestType.GetTrial(testAppointment.LocalDrivingId,testAppointment.TestTypeId);
+            lbTrial.Text = (count + 1).ToString();
         }
         public void LoadData(int id,int Type)
         {
@@ -77,21 +81,20 @@ namespace Driving_License_Issuanse_Project
                 return;
             }
             bool result = false;
-            if (rbPass.Checked)
-                result = true;
+            result = rbPass.Checked;
 
             string Notes = textBox1.Text;
             int TestID = clsBLTest.AddNewTest(TestAppointmentID, result, clsCurrentUser.currentuser.userid, Notes);
+
             if (TestID > 0 && clsBLTestAppointments.UpdatedToLocked(TestAppointmentID))
             {
                 MessageBox.Show("Added successfuly and TestAppointment become locked");
                 btnAdd.Enabled = false;
                 lbTestID.Text = TestID.ToString();
-
             }
             else
             {
-                MessageBox.Show("Added failed.");
+                MessageBox.Show("Added Failed");
             }
         }
         private void btnClose_Click(object sender, EventArgs e)

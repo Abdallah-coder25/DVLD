@@ -21,7 +21,6 @@ namespace Driving_License_Issuanse_Project
         {
             DataTable dt = clsBLTestType.GetInfoOfTestTyes();
             dataGridView1.DataSource = dt;
-            dataGridView1.Columns["TestTypeID"].SortMode = DataGridViewColumnSortMode.Automatic;
             dataGridView1.Columns["TestTypeID"].HeaderText = "Id";
             dataGridView1.Columns["TestTypeTitle"].HeaderText = "Title";
             dataGridView1.Columns["TestTypeDescription"].HeaderText = "Description";

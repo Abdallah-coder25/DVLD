@@ -33,7 +33,7 @@ namespace clsBusinessLayer
         }
         public static int GetDrivierIdByPersonID(int id)
         {
-            return clsDAL.GetDriversIdByPersonID(id);
+            return clsDAL.GetDriverIdByPersonID(id);
         }
         public static int AddNewDrivers(int personID,int createdUserID,DateTime date)
         {

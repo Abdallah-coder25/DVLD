@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -243,7 +244,7 @@ namespace clsDataAccessLayer
             }
             return personid;
         }
-        public static bool UpdateImage(int personId,string imagePath)
+        public static bool UpdateImage(int personId, string imagePath)
         {
             int rowsAffected = 0;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -731,7 +732,7 @@ namespace clsDataAccessLayer
             }
             return fees;
         }
-       
+
 
         //Test Types
         public static DataTable GetAllInfoTestTypes()
@@ -817,7 +818,7 @@ namespace clsDataAccessLayer
             }
             return (rowsAffected > 0);
         }
-       
+
 
         //LocalDriving ViewTable
         public static DataTable GetInfoForLocalDriving()
@@ -869,9 +870,46 @@ namespace clsDataAccessLayer
             }
             return passed;
         }
+        public static bool DeleteApplication(int LDLID)
+        {
+            int result = 0;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"
+                              DELETE FROM Tests 
+                              WHERE TestAppointmentID IN (SELECT TestAppointmentID FROM TestAppointments WHERE LocalDrivingLicenseApplicationID = @LDLAppID);
+                              
+                              DELETE FROM TestAppointments WHERE LocalDrivingLicenseApplicationID = @LDLAppID;
+                              
+                              DECLARE @AppID int = (SELECT ApplicationID FROM LocalDrivingLicenseApplications WHERE LocalDrivingLicenseApplicationID = @LDLAppID);
+                              
+                              DELETE FROM LocalDrivingLicenseApplications WHERE LocalDrivingLicenseApplicationID = @LDLAppID;
+                              
+                              DELETE FROM Applications WHERE ApplicationID = @AppID;
+                             ";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            
+            cmd.Parameters.AddWithValue("@LDLAppID", LDLID);
+            try
+             {
+                cn.Open();
+                result = cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                //
+                result = -1;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            
+            return result > 0;
+        }
+
 
         //Applications
-        public static int AddNewApplication(int personID, DateTime date, int apptypeid, int applicationStatus,DateTime laststatusdate,decimal Paidfees, int CreateByUser)
+        public static int AddNewApplication(int personID, DateTime date, int apptypeid, int applicationStatus, DateTime laststatusdate, decimal Paidfees, int CreateByUser)
         {
             int appId = 0;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -890,7 +928,7 @@ namespace clsDataAccessLayer
             {
                 cn.Open();
                 object result = cmd.ExecuteScalar();
-                if(result != null)
+                if (result != null)
                     appId = Convert.ToInt32(result);
 
             }
@@ -905,7 +943,7 @@ namespace clsDataAccessLayer
             }
             return appId;
         }
-        public static bool HasActiveApplication(int personID,int LicenseClassID)
+        public static bool HasActiveApplication(int personID, int LicenseClassID)
         {
             bool check = false;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -915,7 +953,7 @@ namespace clsDataAccessLayer
                          ON A.ApplicationID = L.ApplicationID
                          WHERE A.ApplicantPersonID = @personID
                          AND L.LicenseClassID = @lcid
-                         AND A.ApplicationStatus = 1";
+                         AND A.ApplicationStatus IN (1,3) ";
             SqlCommand cmd = new SqlCommand(query, cn);
 
             cmd.Parameters.AddWithValue("@personID", personID);
@@ -944,7 +982,8 @@ namespace clsDataAccessLayer
             int transfer = 0;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
             string query = @"UPDATE Applications
-                     SET ApplicationStatus = 2
+                     SET ApplicationStatus = 2,
+                         LastStatusDate = @newDate   
                      WHERE ApplicationID = 
                      (
                          SELECT ApplicationID
@@ -953,6 +992,7 @@ namespace clsDataAccessLayer
                      )";
             SqlCommand cmd = new SqlCommand(query, cn);
             cmd.Parameters.AddWithValue("@id", ldlAppID);
+            cmd.Parameters.AddWithValue("@newDate", DateTime.Now);
             try
             {
                 cn.Open();
@@ -970,7 +1010,7 @@ namespace clsDataAccessLayer
 
             return (transfer > 0);
         }
-        public static bool GetInfoApplicationByID(int id, ref int personID, ref DateTime date,ref int apptypeid, ref int applicationStatus,ref DateTime laststatusdate,ref decimal Paidfees,ref int CreateByUser)
+        public static bool GetInfoApplicationByID(int id, ref int personID, ref DateTime date, ref int apptypeid, ref int applicationStatus, ref DateTime laststatusdate, ref decimal Paidfees, ref int CreateByUser)
         {
             bool result = false;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -1010,8 +1050,9 @@ namespace clsDataAccessLayer
         {
             int update = 0;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
-            string query = @"Update Applications Set
-                                ApplicationStatus = 3
+            string query = @"Update Applications
+                                 Set ApplicationStatus = 3,
+                                     LastStatusDate = @newDate
                                  WHERE ApplicationID = 
                      (
                          SELECT ApplicationID
@@ -1020,6 +1061,7 @@ namespace clsDataAccessLayer
                      )";
             SqlCommand cmd = new SqlCommand(query, cn);
             cmd.Parameters.AddWithValue("@id", LdaID);
+            cmd.Parameters.AddWithValue("@newDate", DateTime.Now);
             try
             {
                 cn.Open();
@@ -1064,7 +1106,7 @@ namespace clsDataAccessLayer
             }
             return dt;
         }
-        public static int GetLicenseClassID(string ClassName)
+        public static int GetLicenseClassIDByName(string ClassName)
         {
             int id = 0;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -1114,7 +1156,7 @@ namespace clsDataAccessLayer
             }
             return classNAme;
         }
-        public static bool GetAllInfoLicenseClass(int id,ref string className,ref string ClassDescription ,ref int  MinimumAllowedAge ,ref int DefaultValidytLength ,ref Decimal ClassFees)
+        public static bool GetAllInfoLicenseClass(int id, ref string className, ref string ClassDescription, ref int MinimumAllowedAge, ref int DefaultValidytLength, ref Decimal ClassFees)
         {
             bool result = false;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -1128,7 +1170,7 @@ namespace clsDataAccessLayer
                 if (reader.Read())
                 {
                     result = true;
-                    className =  reader["ClassName"].ToString();
+                    className = reader["ClassName"].ToString();
                     ClassDescription = reader["ClassDescription"].ToString();
                     MinimumAllowedAge = Convert.ToInt32(reader["MinimumAllowedAge"]);
                     DefaultValidytLength = Convert.ToInt32(reader["DefaultValidityLength"]);
@@ -1146,11 +1188,11 @@ namespace clsDataAccessLayer
                 cn.Close();
             }
             return result;
-        } 
+        }
 
 
         //LocalDrivingLicenseApplications
-        public static int AddNewLocalDrivingLicenseApp(int AppID,int LicneseClassID)
+        public static int AddNewLocalDrivingLicenseApp(int AppID, int LicneseClassID)
         {
             int rowsAffcted = 0;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -1164,8 +1206,8 @@ namespace clsDataAccessLayer
             {
                 cn.Open();
                 object result = cmd.ExecuteScalar();
-                if(result != null)
-                     rowsAffcted = Convert.ToInt32(result);
+                if (result != null)
+                    rowsAffcted = Convert.ToInt32(result);
             }
             catch
             {
@@ -1176,9 +1218,9 @@ namespace clsDataAccessLayer
             {
                 cn.Close();
             }
-            return rowsAffcted ;
+            return rowsAffcted;
         }
-        public static bool GetInfoLocalDrivingLicenseByID(int id,ref int appID,ref int LicenseClassID)
+        public static bool GetInfoLocalDrivingLicenseByID(int id, ref int appID, ref int LicenseClassID)
         {
             bool result = false;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -1192,7 +1234,7 @@ namespace clsDataAccessLayer
                 if (reader.Read())
                 {
                     result = true;
-                    appID          = (int)reader["ApplicationID"];
+                    appID = (int)reader["ApplicationID"];
                     LicenseClassID = (int)reader["LicenseClassID"];
                 }
                 reader.Close();
@@ -1208,7 +1250,56 @@ namespace clsDataAccessLayer
             }
             return result;
         }
-
+        public static int LocalLicneseIDByAppIDAndLicenseClassID(int appID, int LicenseClassID)
+        {
+            int id = 0;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select LocalDrivingLicenseApplicationID from LocalDrivingLicenseApplications where ApplicationID = @appID and LicenseClassID = @lcid";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@appID", appID);
+            cmd.Parameters.AddWithValue("@lcid", LicenseClassID);
+            try
+            {
+                cn.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                    id = Convert.ToInt32(result);
+            }
+            catch
+            {
+                //
+                id = 0;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return id;
+        }
+        public static bool UpdatedLicenseClass(int id,int LCID)
+        {
+            int update = 0;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Update LocalDrivingLicenseApplications set LicenseClassID = @newLicenseClasse where LocalDrivingLicenseApplicationID = @id";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@newLicenseClasse", LCID);
+            try
+            {
+                cn.Open();
+                update = cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                //
+                update = 0;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return update > 0;
+        }
 
         //TestAppointment
         public static bool GetAllInfoTestAppointmenByTestAppoID(int TestAppoID, ref int TestTypeId, ref int LocalDrivingId, ref DateTime AppointmentDate, ref Decimal PaidFees, ref int UserCreating, ref bool Locked)
@@ -1277,7 +1368,7 @@ namespace clsDataAccessLayer
             }
             return newID;
         }
-        public static DataTable AvaibleInfoByLDALIDANDTestTypeID(int LocalDrLicenseID,int TestTypeID)
+        public static DataTable AvaibleInfoByLDALIDANDTestTypeID(int LocalDrLicenseID, int TestTypeID)
         {
             DataTable dt = new DataTable();
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -1289,7 +1380,7 @@ namespace clsDataAccessLayer
             {
                 cn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
-                if(reader.HasRows)
+                if (reader.HasRows)
                     dt.Load(reader);
                 reader.Close();
             }
@@ -1310,14 +1401,14 @@ namespace clsDataAccessLayer
             string query = @"Update TestAppointments set IsLocked = 1 where TestAppointmentID = @id ";
             SqlCommand cmd = new SqlCommand(query, cn);
             cmd.Parameters.AddWithValue("@id", testAppoID);
-            try 
-            { 
+            try
+            {
                 cn.Open();
                 rowsAffected = cmd.ExecuteNonQuery();
             }
             catch
             {
-              //
+                //
             }
             finally
             {
@@ -1351,7 +1442,7 @@ namespace clsDataAccessLayer
             }
             return locked;
         }
-        public static bool UpdateDateByTestAppoID(int id,DateTime AppointmentDate)
+        public static bool UpdateDateByTestAppoID(int id, DateTime AppointmentDate)
         {
             int rowsAffected = 0;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -1413,8 +1504,9 @@ namespace clsDataAccessLayer
             return isFirst;
         }
 
+
         //Tests
-        public static int AddNewTest(int TestAppointmentID,bool TestResult,int CreatedUserID, string Note = "")
+        public static int AddNewTest(int TestAppointmentID, bool TestResult, int CreatedUserID, string Note = "")
         {
             int newID = 0;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -1431,7 +1523,7 @@ namespace clsDataAccessLayer
                 cn.Open();
                 object result = cmd.ExecuteScalar();
                 if (result != null)
-                    newID = Convert.ToInt32(result); 
+                    newID = Convert.ToInt32(result);
             }
             catch
             {
@@ -1476,8 +1568,8 @@ namespace clsDataAccessLayer
             string query = @" SELECT COUNT(*)  FROM Tests T  INNER JOIN TestAppointments TA  ON T.TestAppointmentID = TA.TestAppointmentID 
                                 WHERE TA.LocalDrivingLicenseApplicationID = @ldlID  AND TA.TestTypeID = @typeID  AND T.TestResult = 0;";
             SqlCommand cmd = new SqlCommand(query, cn);
-             cmd.Parameters.AddWithValue("@ldlID", LDLAppID);
-             cmd.Parameters.AddWithValue("@typeID", testTypeID);
+            cmd.Parameters.AddWithValue("@ldlID", LDLAppID);
+            cmd.Parameters.AddWithValue("@typeID", testTypeID);
             try
             {
                 cn.Open();
@@ -1523,11 +1615,37 @@ namespace clsDataAccessLayer
                 cn.Close();
             }
         }
+        public static int GetTrial(int LDID, int TestTypeID)
+        {
+            int number = 0;
 
+            using (SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString))
+            {
+                string query = @"
+            SELECT COUNT(*)
+            FROM Tests T
+            INNER JOIN TestAppointments TA
+                ON T.TestAppointmentID = TA.TestAppointmentID
+            WHERE TA.LocalDrivingLicenseApplicationID = @LDID
+            AND TA.TestTypeID = @TestTypeID";
+
+                SqlCommand cmd = new SqlCommand(query, cn);
+                cmd.Parameters.AddWithValue("@LDID", LDID);
+                cmd.Parameters.AddWithValue("@TestTypeID", TestTypeID);
+
+                cn.Open();
+                object result = cmd.ExecuteScalar();
+
+                if (result != null)
+                    number = Convert.ToInt32(result);
+            }
+
+            return number;
+        }
 
         //License
         //ApplicationID DriverID LicenseClass IssueDate ExpirationDate Notes PaidFees IsActive IssueReason CreatedByUserID
-        public static int AddNewLicense(int AppID,int DrID,int LC,DateTime issueDate,DateTime ExpirationDate ,Decimal PaidFees , bool Active,int IssueReason , int CreatingUser,string Note = "")
+        public static int AddNewLicense(int AppID, int DrID, int LC, DateTime issueDate, DateTime ExpirationDate, Decimal PaidFees, bool Active, int IssueReason, int CreatingUser, string Note = "")
         {
             int rowsAffected = 0;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -1541,10 +1659,10 @@ namespace clsDataAccessLayer
             cmd.Parameters.AddWithValue("@isuueDate", issueDate);
             cmd.Parameters.AddWithValue("@expirationDate", ExpirationDate);
             cmd.Parameters.AddWithValue("@notes", Note);
-             cmd.Parameters.AddWithValue("@paidfees", PaidFees);
-             cmd.Parameters.AddWithValue("@active",Active);
-             cmd.Parameters.AddWithValue("@issueReason",IssueReason);
-             cmd.Parameters.AddWithValue("@creting",CreatingUser);
+            cmd.Parameters.AddWithValue("@paidfees", PaidFees);
+            cmd.Parameters.AddWithValue("@active", Active);
+            cmd.Parameters.AddWithValue("@issueReason", IssueReason);
+            cmd.Parameters.AddWithValue("@creting", CreatingUser);
             try
             {
                 cn.Open();
@@ -1589,6 +1707,272 @@ namespace clsDataAccessLayer
             }
             return existing;
         }
+        public static bool GetInfoLicenseByDriverIDAndLicenseClassID(ref int LicenseID, int AppID, int DriverID, int LicenseClassID, ref DateTime IssueDate, ref DateTime ExpirationDate, ref decimal PaidFees, ref bool IsActive, ref int IssueReason, ref int CreatedByUserID, ref string Notes)
+        {
+            bool exsisting = false;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"SELECT TOP 1 L.*
+                             FROM Licenses L
+                             WHERE L.DriverID = @DriverID
+                             AND L.LicenseClass = @LicenseClassID
+                             AND l.ApplicationID = @AppID
+                             ORDER BY L.IssueDate DESC";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@DriverID", DriverID);
+            cmd.Parameters.AddWithValue("@LicenseClassID", LicenseClassID);
+            cmd.Parameters.AddWithValue("@AppID", AppID);
+            try
+            {
+                cn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    exsisting = true;
+                    LicenseID = (int)reader["LicenseID"];
+                    IssueDate = (DateTime)reader["IssueDate"];
+                    ExpirationDate = (DateTime)reader["ExpirationDate"];
+                    PaidFees = Convert.ToDecimal(reader["PaidFees"]);
+                    IsActive = (bool)reader["IsActive"];
+                    IssueReason = Convert.ToInt32(reader["IssueReason"]);
+                    CreatedByUserID = (int)reader["CreatedByUserID"];
+                    Notes = reader["Notes"].ToString();
+                }
+                reader.Close();
+            }
+            catch
+            {
+                //
+                exsisting = false;
+            }
+            finally
+            {
+                cn.Close();
+            }
+
+            return exsisting;
+        }
+        public static DataTable GetInfoByDriverIDAndLicenseClassID(int DriverID)// int LicenseClassID)
+        {
+            DataTable dt = new DataTable();
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"SELECT L.*
+                             FROM Licenses L
+                             WHERE L.DriverID = @DriverID ";
+            // AND L.LicenseClass = @LicenseClassID";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@DriverID", DriverID);
+            // cmd.Parameters.AddWithValue("@LicenseClassID", LicenseClassID);
+            try
+            {
+                cn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                    dt.Load(reader);
+                reader.Close();
+            }
+            catch
+            {
+                //
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return dt;
+        }
+        public static bool GetInfoLicenseByLicenseID(int LicenseID, ref int AppID, ref int DriverID, ref int LicenseClassID, ref DateTime IssueDate, ref DateTime ExpirationDate, ref decimal PaidFees, ref bool IsActive, ref int IssueReason, ref int CreatedByUserID, ref string Notes)
+        {
+            bool exsisting = false;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select * from Licenses where LicenseID = @id";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", LicenseID);
+            try
+            {
+                cn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    exsisting = true;
+                    DriverID = (int)reader["DriverID"];
+                    AppID = (int)reader["ApplicationID"];
+                    LicenseClassID = (int)reader["LicenseClass"];
+                    IssueDate = (DateTime)reader["IssueDate"];
+                    ExpirationDate = (DateTime)reader["ExpirationDate"];
+                    PaidFees = Convert.ToDecimal(reader["PaidFees"]);
+                    IsActive = (bool)reader["IsActive"];
+                    IssueReason = Convert.ToInt32(reader["IssueReason"]);
+                    CreatedByUserID = (int)reader["CreatedByUserID"];
+                    Notes = reader["Notes"].ToString();
+                }
+                reader.Close();
+            }
+            catch
+            {
+                //
+                exsisting = false;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return exsisting;
+        }
+        public static bool IsFoundLicense(int LicenseID)
+        {
+            bool existing = false;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select 1 from Licenses where LicenseID = @id";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", LicenseID);
+            try
+            {
+                cn.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                    existing = true;
+            }
+            catch
+            {
+                //
+                existing = false;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return existing;
+        }
+        public static bool LicenseIsActiveAndNotExpired(int LicenseID)
+        {
+            bool isActive = false;
+
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+
+            string query = @"SELECT IsActive
+                     FROM Licenses
+                     WHERE LicenseID = @id
+                     AND ExpirationDate > GETDATE()";
+
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", LicenseID);
+
+            try
+            {
+                cn.Open();
+
+                object result = cmd.ExecuteScalar();
+
+                if (result != null)
+                    isActive = Convert.ToBoolean(result);
+            }
+            catch
+            {
+                isActive = false;
+            }
+            finally
+            {
+                cn.Close();
+            }
+
+            return isActive;
+        }
+        public static bool LicenseExpiret(int LicenseID)
+        {
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select 1 from Licenses where LicenseID = @id and ExpirationDate <= GETDATE()";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", LicenseID);
+            try
+            {
+                cn.Open();
+                object result = cmd.ExecuteScalar();
+                return result != null;
+            }
+            catch
+            {
+                //
+                return false;
+            }
+            finally
+            {
+                cn.Close();
+            }
+        }
+        public static bool ConvertingLicenseToInactive(int LicenseID)
+        {
+            int rowsAffected = 0;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Update Licenses set IsActive = 0 where LicenseID = @id";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", LicenseID);
+            try
+            {
+                cn.Open();
+                rowsAffected = cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                //
+                rowsAffected = 0;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return (rowsAffected > 0);
+        }
+        public static int GetLastLicenseIDByDriverIDAndClassID(int DriverID,int LCID)
+        {
+            int LicenseID = 0;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"SELECT TOP 1 LicenseID FROM Licenses WHERE DriverID = @dID AND LicenseClass = @lcID ORDER BY LicenseID DESC";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@dID", DriverID);
+            cmd.Parameters.AddWithValue("@lcID", LCID);
+            try
+            {
+                cn.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                    LicenseID = Convert.ToInt32(result);
+            }
+            catch
+            {
+                //
+                LicenseID = 0;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return LicenseID;
+        }
+        public static bool checkActiveLicense(int LicenseID)
+        {
+            bool IsActive = false;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select IsActive from Licenses where LicenseID = @id";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", LicenseID);
+            try
+            {
+                cn.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                    IsActive = Convert.ToBoolean(result);
+            }
+            catch
+            {
+                //
+                return IsActive = false ;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return IsActive;
+        }
 
 
         //Drivers
@@ -1617,9 +2001,9 @@ namespace clsDataAccessLayer
             }
             return existing;
         }
-        public static int GetDriversIdByPersonID(int personID)
+        public static int GetDriverIdByPersonID(int personID)
         {
-            int id = 0;
+            int id = -1;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
             string query = @"Select DriverID from Drivers where PersonID = @id";
             SqlCommand cmd = new SqlCommand(query, cn);
@@ -1634,7 +2018,7 @@ namespace clsDataAccessLayer
             catch
             {
                 //
-                id = 0;
+                id = -1;
             }
             finally
             {
@@ -1642,7 +2026,7 @@ namespace clsDataAccessLayer
             }
             return id;
         }
-        public static int AddNewDrivers(int PersonID,int CreatedUserID,DateTime CreateDate)
+        public static int AddNewDrivers(int PersonID, int CreatedUserID, DateTime CreateDate)
         {
             int newID = 0;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -1651,8 +2035,8 @@ namespace clsDataAccessLayer
                                          SELECT SCOPE_IDENTITY();";
             SqlCommand cmd = new SqlCommand(query, cn);
             cmd.Parameters.AddWithValue("@pID", PersonID);
-            cmd.Parameters.AddWithValue("@uID",CreatedUserID);
-            cmd.Parameters.AddWithValue("@date",CreateDate);
+            cmd.Parameters.AddWithValue("@uID", CreatedUserID);
+            cmd.Parameters.AddWithValue("@date", CreateDate);
             try
             {
                 cn.Open();
@@ -1672,6 +2056,393 @@ namespace clsDataAccessLayer
             return newID;
         }
 
-       
+
+
+        //vDetailsDrivers
+        public static DataTable GetAllInfoDetailsDrivers()
+        {
+            DataTable dt = new DataTable();
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select * from vDetailsDrivers";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            try
+            {
+                cn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                    dt.Load(reader);
+                reader.Close();
+            }
+            catch
+            {
+                //
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return dt;
+        }
+
+
+        //InternationalLicense
+        public static DataTable GetAllInternationalLicense()
+        {
+
+            DataTable dt = new DataTable();
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select * from InternationalLicenses";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            try
+            {
+                cn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                    dt.Load(reader);
+                reader.Close();
+            }
+            catch
+            {
+                //
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return dt;
+        }
+        public static int AddNewInternationalLicense(int AppID, int DrID, int IssuedUsingLocalLicenseID, DateTime IssueDate, DateTime ExpirationDate, bool Active, int CreatingUser)
+        {
+            int rowsAffected = 0;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Insert into InternationalLicenses (ApplicationID ,DriverID ,IssuedUsingLocalLicenseID ,IssueDate ,ExpirationDate ,IsActive ,CreatedByUserID)
+                                          Values (@appid,@driverid,@issuedUsingLocalLicenseID,@isuueDate,@expirationDate,@active,@creting);
+                                          SELECT SCOPE_IDENTITY();";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@appid", AppID);
+            cmd.Parameters.AddWithValue("@driverid", DrID);
+            cmd.Parameters.AddWithValue("@issuedUsingLocalLicenseID", IssuedUsingLocalLicenseID);
+            cmd.Parameters.AddWithValue("@isuueDate", IssueDate);
+            cmd.Parameters.AddWithValue("@expirationDate", ExpirationDate);
+            cmd.Parameters.AddWithValue("@active", Active);
+            cmd.Parameters.AddWithValue("@creting", CreatingUser);
+            try
+            {
+                cn.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                    rowsAffected = Convert.ToInt32(result);
+            }
+            catch
+            {
+                //
+                rowsAffected = 0;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return rowsAffected;
+        }
+        public static bool GetInfoInternationalLicenseByID(int id, ref int AppID, ref int DrID, ref int IssuedUsingLocalLicenseID, ref DateTime IssueDate, ref DateTime ExpirationDate, ref bool Active, ref int CreatingUser)
+        {
+            bool exsisting = false;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select * from InternationalLicenses where InternationalLicenseID = @id";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                cn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    exsisting = true;
+                    AppID = (int)reader["ApplicationID"];
+                    DrID = (int)reader["DriverID"];
+                    IssuedUsingLocalLicenseID = (int)reader["IssuedUsingLocalLicenseID"];
+                    IssueDate = (DateTime)reader["IssueDate"];
+                    ExpirationDate = (DateTime)reader["ExpirationDate"];
+                    Active = (bool)reader["IsActive"];
+                    CreatingUser = (int)reader["CreatedByUserID"];
+                }
+                reader.Close();
+            }
+            catch
+            {
+                //
+                exsisting = false;
+            }
+            finally
+            {
+                cn.Close();
+
+            }
+            return exsisting;
+        }
+        public static DataTable GetInfoInternationalLicenseByDriverID(int DriverID)
+        {
+            DataTable dt = new DataTable();
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select * from InternationalLicenses where DriverID = @id";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", DriverID);
+            try
+            {
+                cn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                    dt.Load(reader);
+                reader.Close();
+            }
+            catch
+            {
+                //
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return dt;
+        }
+        public static bool PreExistingInternationalLicense(int LocalLicenseID)
+        {
+            bool existing = false;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select 1 from InternationalLicenses where IssuedUsingLocalLicenseID = @id and IsActive = 1";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", LocalLicenseID);
+            try
+            {
+                cn.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                    existing = true;
+            }
+            catch
+            {
+                //
+                existing = false;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return existing;
+        }
+
+
+        //DetainLicese
+        //int licenseid,DateTime dateinDate,decimal fees,int createdByUserid,bool isReleased,int releasedByUserid,int releasedByappid
+        public static int AddNewDetainLicese(int licenseid, DateTime detainDate, decimal fees, int createdByUserid, bool isReleased)
+        {
+            int newID = 0;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Insert into DetainedLicenses (LicenseID,DetainDate,FineFees,CreatedByUser,IsReleased) values (@licenseId,@dateindate,@fees,@creatinguser,@released) SELECT SCOPE_IDENTITY();";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@licenseId", licenseid);
+            cmd.Parameters.AddWithValue("@dateindate", detainDate);
+            cmd.Parameters.AddWithValue("@fees", fees);
+            cmd.Parameters.AddWithValue("@creatinguser", createdByUserid);
+            cmd.Parameters.AddWithValue("@released", isReleased);
+            try
+            {
+                cn.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                    newID = Convert.ToInt32(result);
+            }
+            catch
+            {
+                //
+                newID = 0;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return newID;
+        }
+        public static bool IsLicenseDetained(int licenseID)
+        {
+            bool detain = false;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select top 1 IsReleased from DetainedLicenses where LicenseID = @id ORDER by DetainDate DESC";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", licenseID);
+            try
+            {
+                cn.Open();
+                object result = cmd.ExecuteScalar();
+                if(result != null)
+                {
+                    if (Convert.ToBoolean(result) == false)
+                        detain = true;
+                }
+            }
+            catch
+            {
+                //
+                detain = false;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return detain;
+        }
+        public static bool GetInfoDetainLicense(int Detainid,ref int licenseid,ref DateTime detainDate,ref decimal fees,ref int createdByUserid,ref bool isReleased,ref DateTime ReleaseDate,ref int ReleasedByUserID,ref int ReleasedAppID)
+        {
+            bool result = false;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select * from DetainedLicenses where DetainID = @id";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", Detainid);
+            try
+            {
+                cn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    result = true;
+                    licenseid = (int)(reader["LicenseID"]);
+                    detainDate = (DateTime)(reader["DetainDate"]);
+                    fees = Convert.ToDecimal(reader["FineFees"]);
+                    createdByUserid = (int)(reader["CreatedByUser"]);
+                    isReleased = (bool)(reader["IsReleased"]);
+                    if (reader["ReleasedDate"] != DBNull.Value)
+                        ReleaseDate = (DateTime)reader["ReleasedDate"];
+
+                    if (reader["ReleasedByUserID"] != DBNull.Value)
+                        ReleasedByUserID = (int)reader["ReleasedByUserID"];
+
+                    if (reader["ReleaseApplicationID"] != DBNull.Value)
+                        ReleasedAppID = (int)reader["ReleaseApplicationID"];
+                }
+                reader.Close();
+            }
+            catch
+            {
+                //
+                result = false;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return result;
+        }
+        public static bool LicenseRelease(int LicenseID,int ReleasedUserID,int ReleasedAppID)
+        {
+            int update = 0;
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"UPDATE DetainedLicenses
+                            SET IsReleased = 1,
+                                ReleasedDate = GETDATE(),
+                                ReleasedByUserID = @userid,
+                                ReleaseApplicationID = @AppID
+                            WHERE DetainID = (
+                                SELECT TOP 1 DetainID
+                                FROM DetainedLicenses
+                                WHERE LicenseID = @id
+                                ORDER BY DetainDate DESC )";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", LicenseID);
+            cmd.Parameters.AddWithValue("@userid", ReleasedUserID);
+            cmd.Parameters.AddWithValue("@AppID", ReleasedAppID);
+            try
+            {
+                cn.Open();
+                update = cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                //
+                update = 0;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return update > 0;
+        }
+        public static bool GetLastDetainInfoByLicenseID(int licenseID,ref int detainID,ref DateTime detainDate,ref decimal fineFees, ref int createdByUserid, ref bool isReleased, ref DateTime ReleaseDate, ref int ReleasedByUserID, ref int ReleasedAppID)
+        {
+            bool found = false;
+
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+
+            string query = @" SELECT TOP 1 * FROM DetainedLicenses WHERE LicenseID = @id ORDER BY DetainDate DESC";
+
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.Parameters.AddWithValue("@id", licenseID);
+
+            try
+            {
+                cn.Open();
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    found = true;
+
+                    detainID = (int)reader["DetainID"];
+                    detainDate = (DateTime)reader["DetainDate"];
+                    fineFees = Convert.ToDecimal(reader["FineFees"]);
+                    createdByUserid = (int)(reader["CreatedByUser"]);
+                    isReleased = (bool)(reader["IsReleased"]);
+
+                    if (reader["ReleasedDate"] != DBNull.Value)
+                        ReleaseDate = (DateTime)reader["ReleasedDate"];
+
+                    if (reader["ReleasedByUserID"] != DBNull.Value)
+                        ReleasedByUserID = (int)reader["ReleasedByUserID"];
+
+                    if (reader["ReleaseApplicationID"] != DBNull.Value)
+                        ReleasedAppID = (int)reader["ReleaseApplicationID"];
+                }
+
+                reader.Close();
+            }
+            catch
+            {
+                //
+                found = false;
+            }
+            finally
+            {
+                cn.Close();
+            }
+
+            return found;
+        }
+
+
+        //DetailDetainLicenses
+        public static DataTable GetDetailsDetainLicenses()
+        {
+            DataTable dt = new DataTable();
+            SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
+            string query = @"Select * from DetainedLicensesDetails";
+            SqlCommand cmd = new SqlCommand(query, cn);
+            try
+            {
+                cn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                    dt.Load(reader);
+                reader.Close();
+            }
+            catch
+            {
+                //
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return dt;
+        }
     }
 }

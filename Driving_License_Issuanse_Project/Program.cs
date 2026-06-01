@@ -17,15 +17,16 @@ namespace Driving_License_Issuanse_Project
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-           //while (true)
-           //{
-           //    LoginScreen lg = new LoginScreen();
 
-           //     if (lg.ShowDialog() != DialogResult.OK)
-           //         break;
-           //     Application.Run(new MainForm());
-           // }
-            Application.Run(new LoginScreen());
+            while (true)
+            {
+                LoginScreen login = new LoginScreen();
+
+                if (login.ShowDialog() != DialogResult.OK)
+                    break;
+
+                Application.Run(new MainForm());
+            }
         }   
     }
 }

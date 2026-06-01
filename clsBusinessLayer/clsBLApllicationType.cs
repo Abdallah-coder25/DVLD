@@ -19,18 +19,18 @@ namespace clsBusinessLayer
             ReleaseDetainedDrivingLicense = 5,
             NewInternationalLicense = 6
         }
-        public ApplicationType applicationid { get;}
+        public ApplicationType applicationTypeid { get;}
         public string applicationTitletype { get; set; }
         public Decimal fees { get; set; }
         public clsBLApllicationType()
         {
-            this.applicationid = (ApplicationType)(-1);
+            this.applicationTypeid = (ApplicationType)(-1);
             this.applicationTitletype = "";
             this.fees = 0;
         }
         private clsBLApllicationType(int applicationid, string applicationtype, Decimal fees)
         {
-            this.applicationid = (ApplicationType)applicationid;
+            this.applicationTypeid = (ApplicationType)applicationid;
             this.applicationTitletype = applicationtype;
             this.fees = fees;
         }

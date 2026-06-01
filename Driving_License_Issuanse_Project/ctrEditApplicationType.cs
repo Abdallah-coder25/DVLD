@@ -58,7 +58,7 @@ namespace Driving_License_Issuanse_Project
          
             if (application != null)
             {
-                lbvalue.Text = application.applicationid.ToString();
+                lbvalue.Text = application.applicationTypeid.ToString();
                 txType.Text = application.applicationTitletype;
                 txFees.Text = application.fees.ToString();
             }

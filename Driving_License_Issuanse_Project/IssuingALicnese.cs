@@ -18,7 +18,6 @@ namespace Driving_License_Issuanse_Project
 
         clsBLLocalDrivingLicenseApplications LDLApp;
         clsBLApplication App;
-        clsBLDrivers driver;
         clsBLLicenseClasses licenseClasses;
         clsBLPeople person;
 
@@ -106,7 +105,15 @@ namespace Driving_License_Issuanse_Project
             {
                 //MessageBox.Show("this person already is a drivers");
                 //return;
-                DriverID = clsBLDrivers.GetDrivierIdByPersonID(person.id);
+                if (clsBLDrivers.GetDrivierIdByPersonID(person.id) > -1)
+                {
+                    DriverID = clsBLDrivers.GetDrivierIdByPersonID(person.id);
+                }
+                else
+                {
+                    MessageBox.Show("Error in getting driver id");
+                    return;
+                }
             }
             else
             {

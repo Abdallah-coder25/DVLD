@@ -246,6 +246,12 @@ namespace Driving_License_Issuanse_Project
             return clsImageManager.SaveImage(currentImagePath);
         }
         
+        private void AfterSave()
+        {
+            btnSave.Enabled = false;
+            lkbSet.Enabled = false;
+            lkbRemove.Enabled = false;
+        }
         private void btnSave_Click_1(object sender, EventArgs e)
         {
             if (_IsEmpty())
@@ -266,7 +272,10 @@ namespace Driving_License_Issuanse_Project
                 image = SaveNewImage();
                 if (clsBLPeople.AddPerson(txNational.Text, txFirstName.Text, txSecondName.Text, txThirdName.Text, txLastName.Text, date, gendor,
                                     txAddress.Text, txPhone.Text, txEmail.Text, selectid, image))
+                {
                     MessageBox.Show("Added Successfuly!", "Passed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    AfterSave();
+                }
                 else
                     MessageBox.Show("Added Failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -281,9 +290,15 @@ namespace Driving_License_Issuanse_Project
             }
         }
 
+        private void AfterReset()
+        {
+            btnSave.Enabled = true;
+            lkbSet.Enabled = true;
+        }
         private void btnClose_Click_1(object sender, EventArgs e)
         {
             ResetControls(this);
+            AfterReset();
         }
 
         private void lkbSet_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
