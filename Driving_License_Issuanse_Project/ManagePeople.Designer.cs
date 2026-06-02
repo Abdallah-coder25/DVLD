@@ -121,7 +121,7 @@
             "Address",
             "Phone",
             "Email",
-            "NationalityCountryId"});
+            "CountryName"});
             this.cbSerach.Location = new System.Drawing.Point(121, 233);
             this.cbSerach.Name = "cbSerach";
             this.cbSerach.Size = new System.Drawing.Size(206, 32);

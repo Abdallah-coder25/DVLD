@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography.X509Certificates;
@@ -20,7 +21,15 @@ namespace clsDataAccessLayer
         {
             DataTable dt = new DataTable();
             SqlConnection connection = new SqlConnection(clsDataAccessSetting.connectionString);
-            string query = "Select * From People";
+            // string query = "Select * From People";
+            string query = @"Select  People.PersonID,People.NationalNo,People.FirstName,People.SecondName,People.ThirdName,People.LastName,People.DateOfBirth,
+                            Case
+                            When People.Gendor = 0 then 'Male'
+                            else 'Female'
+                            End as Gendor,
+                            People.Address,People.Phone,People.Email,People.NationalityCountryID,Countries.CountryName,People.ImagePath
+                            From People INNER JOIN Countries ON People.NationalityCountryID = Countries.CountryID";
+                           // Order by People.FirstName";
             SqlCommand command = new SqlCommand(query, connection); ;
             try
             {
@@ -83,15 +92,34 @@ namespace clsDataAccessLayer
                     National = reader["NationalNo"].ToString();
                     First = reader["FirstName"].ToString();
                     Second = reader["SecondName"].ToString();
-                    third = reader["ThirdName"].ToString();
-                    Last = reader["LastName"].ToString();
+                    if (reader["ThirdName"] != DBNull.Value)
+                    {
+                        third = reader["ThirdName"].ToString();
+                    }
+                    else
+                    {
+                        third = "";
+                    }
+                     Last = reader["LastName"].ToString();
                     dateofbirth = Convert.ToDateTime(reader["DateOfBirth"]);
                     gendor = Convert.ToInt32(reader["Gendor"]);
                     adress = reader["Address"].ToString();
                     phone = reader["Phone"].ToString();
-                    email = reader["Email"].ToString();
-                    Nationalcountry = Convert.ToInt32(reader["NationalityCountryID"]);
-                    imagePath = reader["ImagePath"].ToString();
+                    if (reader["Email"] != DBNull.Value)
+                    {
+                        email = reader["Email"].ToString();
+                    }
+                    else
+                    {
+                        email = "";
+                    }
+                     Nationalcountry = Convert.ToInt32(reader["NationalityCountryID"]);
+                    if (reader["ImagePath"] != DBNull.Value)
+                    {
+                        imagePath = reader["ImagePath"].ToString();
+                    }
+                    else
+                        imagePath = "";
                 }
                 reader.Close();
             }
@@ -106,7 +134,7 @@ namespace clsDataAccessLayer
 
             return found;
         }
-        public static bool AddNewPerson(string nat, string fn, string sn, string tn, string ln, DateTime db, int g, string a, string p, string e, int natc, string ip)
+        public static bool AddNewPerson(string nat, string fn, string sn, string ln, DateTime db, int g, string a, string p, int natc, string ip, string e = "", string tn = "")
         {
             bool isSuccess = false;
             SqlConnection connection = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -116,13 +144,19 @@ namespace clsDataAccessLayer
             command.Parameters.AddWithValue("@national", nat);
             command.Parameters.AddWithValue("@first", fn);
             command.Parameters.AddWithValue("@second", sn);
-            command.Parameters.AddWithValue("@third", tn);
+            if (!string.IsNullOrEmpty(tn))
+                command.Parameters.AddWithValue("@third", tn);
+            else
+                command.Parameters.AddWithValue("@third", System.DBNull.Value);
             command.Parameters.AddWithValue("@last", ln);
             command.Parameters.AddWithValue("@date", db);
             command.Parameters.AddWithValue("@gendor", g);
             command.Parameters.AddWithValue("@address", a);
             command.Parameters.AddWithValue("@phone", p);
-            command.Parameters.AddWithValue("@email", e);
+            if (!string.IsNullOrEmpty(e))
+                command.Parameters.AddWithValue("@email", e);
+            else
+                command.Parameters.AddWithValue("@email", System.DBNull.Value);
             command.Parameters.AddWithValue("@nationalcountry", natc);
             if (!string.IsNullOrEmpty(ip))
                 command.Parameters.AddWithValue("@imagepath", ip);
@@ -146,7 +180,7 @@ namespace clsDataAccessLayer
             }
             return isSuccess;
         }
-        public static bool UpdatePeople(int ID, string nat, string fn, string sn, string tn, string ln, DateTime db, int g, string a, string p, string e, int natc, string ip)
+        public static bool UpdatePeople(int ID, string nat, string fn, string sn, string ln, DateTime db, int g, string a, string p, int natc, string ip, string e = "", string tn = "")
         {
             int rowsAffected = 0;
             SqlConnection connection = new SqlConnection(clsDataAccessSetting.connectionString);
@@ -171,13 +205,19 @@ namespace clsDataAccessLayer
             command.Parameters.AddWithValue("@nat", nat);
             command.Parameters.AddWithValue("@Firs", fn);
             command.Parameters.AddWithValue("@Seco", sn);
-            command.Parameters.AddWithValue("@thir", tn);
+            if (!string.IsNullOrEmpty(tn))
+                command.Parameters.AddWithValue("@thir", tn);
+            else
+                command.Parameters.AddWithValue("@thir", System.DBNull.Value);
             command.Parameters.AddWithValue("@Las", ln);
             command.Parameters.AddWithValue("@dat", db);
             command.Parameters.AddWithValue("@gen", g);
             command.Parameters.AddWithValue("@adr", a);
             command.Parameters.AddWithValue("@pho", p);
-            command.Parameters.AddWithValue("@ema", e);
+            if (!string.IsNullOrEmpty(e))
+                command.Parameters.AddWithValue("@ema", e);
+            else
+                command.Parameters.AddWithValue("@ema", System.DBNull.Value);
             command.Parameters.AddWithValue("@natc", natc);
             if (!string.IsNullOrEmpty(ip))
                 command.Parameters.AddWithValue("@img", ip);

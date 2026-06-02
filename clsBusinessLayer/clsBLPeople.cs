@@ -76,13 +76,13 @@ namespace clsBusinessLayer
                 return null;
 
         }
-        public static bool AddPerson(string nat, string fn, string sn, string tn, string ln, DateTime db, int g, string a, string p, string e, int natc, string ip)
+        public static bool AddPerson(string nat, string fn, string sn, string ln, DateTime db, int g, string a, string p, int natc, string ip, string e = "", string tn = "")
         {
-            return clsDAL.AddNewPerson(nat, fn, sn, tn, ln, db, g, a, p, e, natc, ip);
+            return clsDAL.AddNewPerson(nat, fn, sn, ln, db, g, a, p, natc, ip, e, tn);
         }
-        public static bool Update(int ID, string nat, string fn, string sn, string tn, string ln, DateTime db, int g, string a, string p, string e, int natc, string ip)
+        public static bool Update(int ID, string nat, string fn, string sn, string ln, DateTime db, int g, string a, string p, int natc, string ip, string e, string tn = "")
         {
-            return clsDAL.UpdatePeople(ID, nat, fn, sn, tn, ln, db, g, a, p, e, natc, ip);
+            return clsDAL.UpdatePeople(ID, nat, fn, sn, ln, db, g, a, p, natc, ip,e,tn);
         }
         public static bool Delete(int id)
         {

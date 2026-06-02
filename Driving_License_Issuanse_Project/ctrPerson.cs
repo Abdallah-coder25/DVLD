@@ -76,10 +76,12 @@ namespace Driving_License_Issuanse_Project
             txPhone.Text = People.phone;
             txAddress.Text = People.adress;
 
-            if (_IsMale())
-                rbMale.Checked = true;
-            else
-                rbFemal.Checked = true;
+            //if (_IsMale())
+            //    rbMale.Checked = true;
+            //else
+            //    rbFemal.Checked = true;
+            rbMale.Checked = _IsMale();
+            rbFemal.Checked = !_IsMale();
 
             if (People.email != null)
                 txEmail.Text = People.email;
@@ -176,9 +178,8 @@ namespace Driving_License_Issuanse_Project
         }
         private bool _IsEmpty()
         {
-            if (string.IsNullOrEmpty(txAddress.Text) || string.IsNullOrEmpty(txFirstName.Text) || string.IsNullOrEmpty(txSecondName.Text) ||
-               string.IsNullOrEmpty(txThirdName.Text) || string.IsNullOrEmpty(txLastName.Text) || string.IsNullOrEmpty(txNational.Text) ||
-               string.IsNullOrEmpty(txPhone.Text))
+            if (string.IsNullOrEmpty(txAddress.Text) || string.IsNullOrEmpty(txFirstName.Text) || string.IsNullOrEmpty(txSecondName.Text)
+                || string.IsNullOrEmpty(txLastName.Text) || string.IsNullOrEmpty(txNational.Text) || string.IsNullOrEmpty(txPhone.Text))
             {
                 MessageBox.Show("Please fill in all fields,except the email and third name fields, which are not mandatory", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return true;
@@ -262,7 +263,7 @@ namespace Driving_License_Issuanse_Project
             DateTime date = dateTimePicker1.Value;
             string image = "";
 
-            if (_IsMale())
+            if (rbMale.Checked)
                 gendor = 0;
             else
                 gendor = 1;
@@ -270,8 +271,8 @@ namespace Driving_License_Issuanse_Project
             if (Mode == enMode.Add)
             {
                 image = SaveNewImage();
-                if (clsBLPeople.AddPerson(txNational.Text, txFirstName.Text, txSecondName.Text, txThirdName.Text, txLastName.Text, date, gendor,
-                                    txAddress.Text, txPhone.Text, txEmail.Text, selectid, image))
+                if (clsBLPeople.AddPerson(txNational.Text, txFirstName.Text, txSecondName.Text, txLastName.Text, date, gendor,
+                                    txAddress.Text, txPhone.Text, selectid, image, txEmail.Text, txThirdName.Text))
                 {
                     MessageBox.Show("Added Successfuly!", "Passed", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     AfterSave();
@@ -282,8 +283,8 @@ namespace Driving_License_Issuanse_Project
             else
             {
                 image = UpdateImage();
-                if (clsBLPeople.Update(ID, txNational.Text, txFirstName.Text, txSecondName.Text, txThirdName.Text, txLastName.Text, date, gendor,
-                                    txAddress.Text, txPhone.Text, txEmail.Text, selectid, image))
+                if (clsBLPeople.Update(ID, txNational.Text, txFirstName.Text, txThirdName.Text, txLastName.Text, date, gendor,
+                                    txAddress.Text, txPhone.Text, selectid, image,txEmail.Text ,txSecondName.Text))
                     MessageBox.Show("Updated Successfuly!", "Passed", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else
                     MessageBox.Show("Updated Failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);

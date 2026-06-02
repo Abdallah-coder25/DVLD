@@ -23,6 +23,7 @@ namespace Driving_License_Issuanse_Project
         {
             dvPerson = clsBLPeople.GetInfoPeople();
             dataGridView1.DataSource = dvPerson;
+            dataGridView1.Columns["NationalityCountryID"].Visible = false;
             lbNumber.Text = dvPerson.Rows.Count.ToString();
         }
         private void btnAdd_Click(object sender, EventArgs e)
@@ -84,7 +85,7 @@ namespace Driving_License_Issuanse_Project
                         dv.RowFilter = $"Convert(DateOfBirth , 'System.String') like  '%{txSearch.Text}%'";
                         break;
                     case 8:
-                        dv.RowFilter = $"Convert (Gendor , 'System.String' ) LIKE '%{txSearch.Text}%'";
+                        dv.RowFilter = $"Gendor  LIKE '%{txSearch.Text}%'";
                         break;
                     case 9:
                         dv.RowFilter = $"Address LIKE '%{txSearch.Text}%'";
@@ -96,7 +97,7 @@ namespace Driving_License_Issuanse_Project
                         dv.RowFilter = $"Email LIKE '%{txSearch.Text}%'";
                         break;
                     case 12:
-                        dv.RowFilter = $"Convert (NationalityCountryID , 'System.String') like '%{txSearch.Text}%'";
+                        dv.RowFilter = $"CountryName like '%{txSearch.Text}%'";
                         break;
                     default:
                         dv.RowFilter = "";
