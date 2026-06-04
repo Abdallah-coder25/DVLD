@@ -242,53 +242,7 @@ namespace Driving_License_Issuanse_Project
             }
         }
 
-        private bool _HandlePersonImage()
-        {
-
-            //this procedure will handle the person image,
-            //it will take care of deleting the old image from the folder
-            //in case the image changed. and it will rename the new image with guid and 
-            // place it in the images folder.
-
-
-            //_Person.ImagePath contains the old Image, we check if it changed then we copy the new image
-            if (_Person.ImagePath != pbPersonImage.ImageLocation)
-            {
-                if (_Person.ImagePath != "")
-                {
-                    //first we delete the old image from the folder in case there is any.
-
-                    try
-                    {
-                        File.Delete(_Person.ImagePath);
-                    }
-                    catch (IOException)
-                    {
-                        // We could not delete the file.
-                        //log it later   
-                    }
-                }
-
-                if (pbPersonImage.ImageLocation != null)
-                {
-                    //then we copy the new image to the image folder after we rename it
-                    string SourceImageFile = pbPersonImage.ImageLocation.ToString();
-
-                    if (clsUtil.CopyImageToProjectImagesFolder(ref SourceImageFile))
-                    {
-                        pbPersonImage.ImageLocation = SourceImageFile;
-                        return true;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error Copying Image File", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return false;
-                    }
-                }
-
-            }
-            return true;
-        }
+      
         private string UpdateImage()
         {
             //if (string.IsNullOrEmpty(currentImagePath))

@@ -38,7 +38,6 @@ namespace Driving_License_Issuanse_Project
 
             user = clsBLUser.GETUserByPersonID(ID);
             person = clsBLPeople.GetPersonByID(ID);
-            lkbEdit.Enabled = false;
             if (person != null && user != null)
             {
                 lbInfoNational.Text = person.national;
@@ -71,6 +70,20 @@ namespace Driving_License_Issuanse_Project
             }
 
 
+        }
+
+        private void lkbEdit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (person != null && user != null)
+            {
+                ModeOfPerosn mode = new ModeOfPerosn(person.id);
+                mode.ShowDialog(this);
+                _LoadInfo();
+            }
+            else
+            {
+                lkbEdit.Enabled = false;
+            }
         }
     }
 }
