@@ -22,8 +22,8 @@ namespace Driving_License_Issuanse_Project
         private enMode Mode;
         clsBLPeople People;
         int ID;
-        string currentImagePath = "";
-
+        // string currentImagePath = "";
+        string currentImagePath = null;
         public int id
         {
             get { return ID; }
@@ -86,18 +86,34 @@ namespace Driving_License_Issuanse_Project
             if (People.email != null)
                 txEmail.Text = People.email;
 
+            //if (!string.IsNullOrEmpty(People.imagePath) && File.Exists(People.imagePath))
+            //{
+            //    pbImagePerson.ImageLocation = People.imagePath;
+            //    currentImagePath = People.imagePath;
+            //    lkbRemove.Visible = true;
+            //}
+            //else
+            //{
+            //    lkbRemove.Visible = false;
+            //    DefaultImage();
+            //}
             if (!string.IsNullOrEmpty(People.imagePath) && File.Exists(People.imagePath))
             {
-                pbImagePerson.ImageLocation = People.imagePath;
-                currentImagePath = People.imagePath;
+                using (Image img = Image.FromFile(People.imagePath))
+                {
+                    pbImagePerson.Image = new Bitmap(img);
+                }
+
+                currentImagePath = null; // لا يوجد تغيير بعد التحميل
                 lkbRemove.Visible = true;
             }
             else
             {
-                lkbRemove.Visible = false;
                 DefaultImage();
+                lkbRemove.Visible = false;
             }
         }
+
         private void LoadData()
         {
             GetCountries();
@@ -113,7 +129,6 @@ namespace Driving_License_Issuanse_Project
             }
             if (ID > 0)
                 InfoPerson();
-
         }
         private void ResetControls(Control parent)
         {
@@ -143,6 +158,7 @@ namespace Driving_License_Issuanse_Project
 
             lkbRemove.Visible = false;
         }
+
         public void SetReadOnly(bool readOnly)
         {
             ApplyReadOnly(this, readOnly);
@@ -176,6 +192,7 @@ namespace Driving_License_Issuanse_Project
                     ApplyReadOnly(ctl, readOnly);
             }
         }
+
         private bool _IsEmpty()
         {
             if (string.IsNullOrEmpty(txAddress.Text) || string.IsNullOrEmpty(txFirstName.Text) || string.IsNullOrEmpty(txSecondName.Text)
@@ -224,24 +241,104 @@ namespace Driving_License_Issuanse_Project
                 return false;
             }
         }
+
+        private bool _HandlePersonImage()
+        {
+
+            //this procedure will handle the person image,
+            //it will take care of deleting the old image from the folder
+            //in case the image changed. and it will rename the new image with guid and 
+            // place it in the images folder.
+
+
+            //_Person.ImagePath contains the old Image, we check if it changed then we copy the new image
+            if (_Person.ImagePath != pbPersonImage.ImageLocation)
+            {
+                if (_Person.ImagePath != "")
+                {
+                    //first we delete the old image from the folder in case there is any.
+
+                    try
+                    {
+                        File.Delete(_Person.ImagePath);
+                    }
+                    catch (IOException)
+                    {
+                        // We could not delete the file.
+                        //log it later   
+                    }
+                }
+
+                if (pbPersonImage.ImageLocation != null)
+                {
+                    //then we copy the new image to the image folder after we rename it
+                    string SourceImageFile = pbPersonImage.ImageLocation.ToString();
+
+                    if (clsUtil.CopyImageToProjectImagesFolder(ref SourceImageFile))
+                    {
+                        pbPersonImage.ImageLocation = SourceImageFile;
+                        return true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error Copying Image File", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
+                }
+
+            }
+            return true;
+        }
         private string UpdateImage()
         {
-            if (string.IsNullOrEmpty(currentImagePath))
+            //if (string.IsNullOrEmpty(currentImagePath))
+            //{
+            //    if (!string.IsNullOrEmpty(People.imagePath) && File.Exists(People.imagePath))
+            //        clsImageManager.DeleteImage(People.imagePath);
+
+            //    return "";
+            //}
+
+            //if (currentImagePath != People.imagePath)
+            //    return clsImageManager.UpdateImage(People.imagePath, currentImagePath);
+
+            //return People.imagePath;
+            if (currentImagePath == "DELETE")
             {
-                if (!string.IsNullOrEmpty(People.imagePath) && File.Exists(People.imagePath))
+                if (!string.IsNullOrEmpty(People.imagePath) &&
+                    File.Exists(People.imagePath))
+                {
                     clsImageManager.DeleteImage(People.imagePath);
+                }
 
                 return "";
             }
 
+            if (string.IsNullOrEmpty(currentImagePath))
+                return People.imagePath;
+
             if (currentImagePath != People.imagePath)
-                return clsImageManager.UpdateImage(People.imagePath, currentImagePath);
+            {
+                string newPath = clsImageManager.SaveImage(currentImagePath);
+
+                if (!string.IsNullOrEmpty(newPath))
+                {
+                    if (!string.IsNullOrEmpty(People.imagePath))
+                        clsImageManager.DeleteImage(People.imagePath);
+
+                    return newPath;
+                }
+            }
 
             return People.imagePath;
         }
         private string SaveNewImage()
         {
-            if (string.IsNullOrEmpty(currentImagePath))
+            //if (string.IsNullOrEmpty(currentImagePath))
+            //    return "";
+
+            //return clsImageManager.SaveImage(currentImagePath);
+            if (string.IsNullOrEmpty(currentImagePath) || currentImagePath == "DELETE")
                 return "";
 
             return clsImageManager.SaveImage(currentImagePath);
@@ -283,8 +380,8 @@ namespace Driving_License_Issuanse_Project
             else
             {
                 image = UpdateImage();
-                if (clsBLPeople.Update(ID, txNational.Text, txFirstName.Text, txThirdName.Text, txLastName.Text, date, gendor,
-                                    txAddress.Text, txPhone.Text, selectid, image,txEmail.Text ,txSecondName.Text))
+                if (clsBLPeople.Update(ID, txNational.Text, txFirstName.Text,txSecondName.Text, txLastName.Text, date, gendor,
+                                    txAddress.Text, txPhone.Text, selectid, image,txEmail.Text , txThirdName.Text))
                     MessageBox.Show("Updated Successfuly!", "Passed", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else
                     MessageBox.Show("Updated Failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -313,7 +410,6 @@ namespace Driving_License_Issuanse_Project
                 lkbRemove.Visible = true;
             }
         }
-
         private void lkbRemove_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (People != null && !string.IsNullOrEmpty(People.imagePath) && File.Exists(People.imagePath))
@@ -321,8 +417,9 @@ namespace Driving_License_Issuanse_Project
                 clsImageManager.DeleteImage(People.imagePath);
             }
             pbImagePerson.Image = Properties.Resources.Male_512;
-            currentImagePath = "";
+            currentImagePath = "DELETE";
             lkbRemove.Visible = false;
+
         }
 
         private void txEmail_Validating_1(object sender, CancelEventArgs e)
@@ -332,7 +429,6 @@ namespace Driving_License_Issuanse_Project
             else
                 errorProvider1.SetError(txEmail, "");
         }
-
         private void txPhone_Validating(object sender, CancelEventArgs e)
         {
             if (!_CheckPhone(txPhone.Text))
@@ -340,6 +436,7 @@ namespace Driving_License_Issuanse_Project
             else
                 errorProvider1.SetError(txPhone, "");
         }
+
         private void ValidateName(TextBox textBox, CancelEventArgs e)
         {
             for (short i = 0; i < textBox.Text.Length; i++)
@@ -353,12 +450,10 @@ namespace Driving_License_Issuanse_Project
             }
             errorProvider1.SetError(textBox, "");
         }
-
         private void ValidateName(object sender, CancelEventArgs e)
         {
             ValidateName(sender as TextBox, e);
         }
-
         private void txNational_Validating(object sender, CancelEventArgs e)
         {
             if (Mode == enMode.Add)
