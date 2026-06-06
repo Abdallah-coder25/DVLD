@@ -313,12 +313,6 @@
     <Compile Include="UpdateTestType.Designer.cs">
       <DependentUpon>UpdateTestType.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControl1.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControl1.Designer.cs">
-      <DependentUpon>UserControl1.cs</DependentUpon>
-    </Compile>
     <Compile Include="VisionTestAppointment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -466,9 +460,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UpdateTestType.resx">
       <DependentUpon>UpdateTestType.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControl1.resx">
-      <DependentUpon>UserControl1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VisionTestAppointment.resx">
       <DependentUpon>VisionTestAppointment.cs</DependentUpon>

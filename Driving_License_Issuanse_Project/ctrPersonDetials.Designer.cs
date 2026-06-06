@@ -99,6 +99,7 @@
             this.lkbEdit.TabIndex = 23;
             this.lkbEdit.TabStop = true;
             this.lkbEdit.Text = "Edit Peron Info";
+            this.lkbEdit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkbEdit_LinkClicked);
             // 
             // pbImage
             // 

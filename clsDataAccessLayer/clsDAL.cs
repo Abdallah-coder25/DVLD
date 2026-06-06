@@ -2249,7 +2249,7 @@ namespace clsDataAccessLayer
         {
             bool existing = false;
             SqlConnection cn = new SqlConnection(clsDataAccessSetting.connectionString);
-            string query = @"Select 1 from InternationalLicenses where IssuedUsingLocalLicenseID = @id and IsActive = 1";
+            string query = @"Select found = 1 from InternationalLicenses where IssuedUsingLocalLicenseID = @id and IsActive = 1";
             SqlCommand cmd = new SqlCommand(query, cn);
             cmd.Parameters.AddWithValue("@id", LocalLicenseID);
             try

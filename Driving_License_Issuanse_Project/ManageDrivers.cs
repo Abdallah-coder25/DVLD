@@ -14,6 +14,7 @@ namespace Driving_License_Issuanse_Project
     public partial class ManageDrivers : Form
     {
         DataTable dt;
+        
         public ManageDrivers()
         {
             InitializeComponent();
@@ -125,6 +126,14 @@ namespace Driving_License_Issuanse_Project
             else
                 dv.RowFilter = $"ActiveLicense = false";
             lbNumber.Text = dv.Count.ToString();
+        }
+
+        private void showDetailsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int personID = (int)dataGridView1.CurrentRow.Cells["PersonID"].Value;
+            DetailsPerson details = new DetailsPerson(personID);
+            details.ShowDialog();
+            LoadData();
         }
     }
 }

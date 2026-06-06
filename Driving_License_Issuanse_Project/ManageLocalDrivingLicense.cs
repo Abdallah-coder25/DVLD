@@ -51,7 +51,7 @@ namespace Driving_License_Issuanse_Project
             cancelApplicationToolStripMenuItem.Enabled = true;
             sechduleStreetTestToolStripMenuItem.Enabled = true;
             showApplicationDetailsToolStripMenuItem.Enabled = true;
-            showPersonLicenseHistoryToolStripMenuItem.Enabled = true;
+            showPersonLicenseHistoryToolStripMenuItem.Enabled = false;
             sToolStripMenuItem.Enabled = false;
         }
         private void AnyPassed()

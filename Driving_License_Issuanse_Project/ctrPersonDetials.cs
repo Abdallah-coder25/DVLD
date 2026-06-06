@@ -36,7 +36,6 @@ namespace Driving_License_Issuanse_Project
                 return;
 
             person = clsBLPeople.GetPersonByID(ID);
-            lkbEdit.Enabled = false;
             if (person != null)
             {
                 lbInfoNational.Text = person.national;
@@ -67,6 +66,12 @@ namespace Driving_License_Issuanse_Project
 
         }
 
+        private void lkbEdit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ModeOfPerosn mode = new ModeOfPerosn(person.id);
+            mode.ShowDialog();
+            _LoadInfo();
+        }
     }
 }
 
