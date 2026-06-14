@@ -30,7 +30,6 @@
         {
             this.grDLAI = new System.Windows.Forms.GroupBox();
             this.lbDLAID = new System.Windows.Forms.Label();
-            this.lbShow = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.lbClassName = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -54,14 +53,15 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.lkbLicenseInfo = new System.Windows.Forms.LinkLabel();
             this.grDLAI.SuspendLayout();
             this.gbABI.SuspendLayout();
             this.SuspendLayout();
             // 
             // grDLAI
             // 
+            this.grDLAI.Controls.Add(this.lkbLicenseInfo);
             this.grDLAI.Controls.Add(this.lbDLAID);
-            this.grDLAI.Controls.Add(this.lbShow);
             this.grDLAI.Controls.Add(this.label5);
             this.grDLAI.Controls.Add(this.lbClassName);
             this.grDLAI.Controls.Add(this.label3);
@@ -82,15 +82,6 @@
             this.lbDLAID.Size = new System.Drawing.Size(33, 19);
             this.lbDLAID.TabIndex = 7;
             this.lbDLAID.Text = "???";
-            // 
-            // lbShow
-            // 
-            this.lbShow.AutoSize = true;
-            this.lbShow.Location = new System.Drawing.Point(36, 90);
-            this.lbShow.Name = "lbShow";
-            this.lbShow.Size = new System.Drawing.Size(138, 19);
-            this.lbShow.TabIndex = 6;
-            this.lbShow.Text = "Show License Info";
             // 
             // label5
             // 
@@ -319,6 +310,17 @@
             this.label12.TabIndex = 15;
             this.label12.Text = "ID";
             // 
+            // lkbLicenseInfo
+            // 
+            this.lkbLicenseInfo.AutoSize = true;
+            this.lkbLicenseInfo.Location = new System.Drawing.Point(26, 90);
+            this.lkbLicenseInfo.Name = "lkbLicenseInfo";
+            this.lkbLicenseInfo.Size = new System.Drawing.Size(138, 19);
+            this.lkbLicenseInfo.TabIndex = 8;
+            this.lkbLicenseInfo.TabStop = true;
+            this.lkbLicenseInfo.Text = "Show License Info";
+            this.lkbLicenseInfo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkbLicenseInfo_LinkClicked);
+            // 
             // ctrApplicationDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -341,7 +343,6 @@
         private System.Windows.Forms.GroupBox grDLAI;
         private System.Windows.Forms.GroupBox gbABI;
         private System.Windows.Forms.Label lbDLAID;
-        private System.Windows.Forms.Label lbShow;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label lbClassName;
         private System.Windows.Forms.Label label3;
@@ -364,5 +365,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.LinkLabel lkbInfo;
+        private System.Windows.Forms.LinkLabel lkbLicenseInfo;
     }
 }

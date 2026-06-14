@@ -15,7 +15,6 @@ namespace Driving_License_Issuanse_Project
     public partial class ctrApplicationDetails : UserControl
     {
         int ID = 0;
-
         clsBLLocalDrivingLicenseApplications LDLApp;
         clsBLApplication App;
         clsBLApllicationType AppType;
@@ -67,6 +66,19 @@ namespace Driving_License_Issuanse_Project
             lbDate.Text = App.appDate.ToString();
             lbStatusDate.Text = App.lastStatusDate.ToString();
             lbCreateBy.Text = user.username;
+        }
+
+        private void lkbLicenseInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (clsBLLocalDriving.PassedResult(LDLApp.LDLAppID) == 3)
+            {
+                int DriverID = clsBLDrivers.GetDrivierIdByPersonID(App.appPersonId);
+                int LicenseID = clsBLLicense.LastLicenseIDByDriverIDAndLicenseClassID(DriverID, LDLApp.LicenseClassID);
+                DriverLicenseInfo info = new DriverLicenseInfo(LicenseID);
+                info.ShowDialog();
+            }
+            else
+                lkbLicenseInfo.Enabled = false;
         }
     }
 }
