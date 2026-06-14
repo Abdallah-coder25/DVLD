@@ -78,7 +78,7 @@ namespace Driving_License_Issuanse_Project
                 info.ShowDialog();
             }
             else
-                lkbLicenseInfo.Enabled = false;
+               MessageBox.Show("The applicant has not passed the driving test yet.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
