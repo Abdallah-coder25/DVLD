@@ -11,20 +11,20 @@ namespace clsBusinessLayer
     public class clsBLTestType
     {
         public enum TestType { VisionTest = 1,WrittenTest =2,Street = 3};
-        public TestType testtypeid { get; set; }
+        public int testtypeid { get; }
         public string testTypetitle { get; set; }
         public string testtypeDesription { get; set; }
         public Decimal fees { get; set; }
         public clsBLTestType()
         {
-            this.testtypeid = (TestType)(-1);
+            this.testtypeid = -1;
             this.testTypetitle = "";
             this.testtypeDesription = "";
             this.fees = 0;
         }
         private clsBLTestType(int id, string title, string description, Decimal fees)
         {
-            this.testtypeid = (TestType)(id);
+            this.testtypeid = id;
             this.testTypetitle = title;
             this.testtypeDesription = description;
             this.fees = fees;

@@ -55,7 +55,7 @@ namespace Driving_License_Issuanse_Project
             test = clsBLTestType.GetInformationOfOneTestType(ID);
             if (test != null)
             {
-                lbInfoId.Text = test.testtypeid.ToString();
+                lbValue.Text = test.testtypeid.ToString();
                 txTitle.Text = test.testTypetitle;
                 txDescription.Text = test.testtypeDesription;
                 txFees.Text = test.fees.ToString();

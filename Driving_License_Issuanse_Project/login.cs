@@ -50,15 +50,12 @@ namespace Driving_License_Issuanse_Project
         {
             if (IsEmpty() || !clsBLUser.FoundUserActive(txName.Text, txPassword.Text))
             {
-                MessageBox.Show("Invalid username or password or not active",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                
+               MessageBox.Show("Invalid username or password or not active", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
-            clsCurrentUser.currentuser =
-                clsBLUser.CurrentUser(txName.Text, txPassword.Text);
+            
+            clsCurrentUser.currentuser = clsBLUser.CurrentUser(txName.Text, txPassword.Text);
 
             if (checkBox1.Checked)
                 _SaveUser();
@@ -74,3 +71,4 @@ namespace Driving_License_Issuanse_Project
         }
     }
 }
+

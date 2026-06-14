@@ -9,6 +9,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net.Mail;
 
 namespace Driving_License_Issuanse_Project
 {
@@ -97,6 +98,7 @@ namespace Driving_License_Issuanse_Project
             //    lkbRemove.Visible = false;
             //    DefaultImage();
             //}
+            cbCountry.SelectedValue = People.nationalcountry;
             if (!string.IsNullOrEmpty(People.imagePath) && File.Exists(People.imagePath))
             {
                 using (Image img = Image.FromFile(People.imagePath))
@@ -298,6 +300,7 @@ namespace Driving_License_Issuanse_Project
             return clsImageManager.SaveImage(currentImagePath);
         }
         
+
         private void AfterSave()
         {
             btnSave.Enabled = false;

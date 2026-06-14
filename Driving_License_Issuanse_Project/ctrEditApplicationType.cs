@@ -46,8 +46,7 @@ namespace Driving_License_Issuanse_Project
             if (!decimal.TryParse(txFees.Text, out decimal newFees))
                 return false;
 
-            return (txType.Text != application.applicationTitletype ||
-                    newFees != application.fees);
+            return (txType.Text != application.applicationTitletype || newFees != application.fees);
         }
         private void LoadInformation()
         {
