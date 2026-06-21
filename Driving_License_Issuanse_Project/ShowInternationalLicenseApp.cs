@@ -196,6 +196,12 @@ namespace Driving_License_Issuanse_Project
                 return;
             }
             LoadData();
+            if (LicenseClass.LicenceClasseID != (int)clsBLLicenseClasses.ClassName.OrdinarDriving)
+            {
+                MessageBox.Show("International licenses can only be issued for ordinary driving licenses. Please ensure the local license is of the ordinary driving class before issuing an international license.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ResetControl();
+                return;
+            }
             lkbLicenseHistory.Enabled = true;
         }
 

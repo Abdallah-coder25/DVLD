@@ -85,6 +85,7 @@ namespace Driving_License_Issuanse_Project
             lbFees.Text = testType.fees.ToString();
             lbTotalFees.Text = testType.fees.ToString();
             lbTrial.Text = (GetTrial()+1).ToString();
+            dateTimePicker1.MinDate = DateTime.Now;
         }
         private void InformationInModeAdd()
         {
@@ -113,7 +114,7 @@ namespace Driving_License_Issuanse_Project
             dateTimePicker1.Value = testAppointment.AppointmentDate;
             lbNA.Text = EditWithtestApponID.ToString();
             button1.Enabled = true;
-
+          //  dateTimePicker1.MinDate = DateTime.Now;
             bool isFirst = clsBLTestAppointments.IsFirstTest(EditWithtestApponID, testAppointment.LocalDrivingId, testAppointment.TestTypeId);
             decimal renew = 0;
 
@@ -172,12 +173,13 @@ namespace Driving_License_Issuanse_Project
             lbID.Text = localDrivingLicenseApp.LDLAppID.ToString();
             lbClassName.Text = clsBLLicenseClasses.GetLicenseName(localDrivingLicenseApp.LicenseClassID);
             lbName.Text = $"{person.firstname + " " + person.secondname + " " + person.lastname}";
-            dateTimePicker1.Value = DateTime.Now;
+           // dateTimePicker1.Value = DateTime.Now;
             lbFees.Text = testType.fees.ToString();
             testAppointment.PaidFees = testType.fees + clsBLApllicationType.GetInformation((int)ApplicationType.RenewLocalDrivingLicense).fees;
             lbRenewAppFees.Text = clsBLApllicationType.GetInformation((int)ApplicationType.RenewLocalDrivingLicense).fees.ToString();
             lbTotalFees.Text = testAppointment.PaidFees.ToString();
             lbTrial.Text = (GetTrial()+1).ToString();
+            dateTimePicker1.MinDate = DateTime.Now;
         }
         private void LoadInformationModeRenew()
         {

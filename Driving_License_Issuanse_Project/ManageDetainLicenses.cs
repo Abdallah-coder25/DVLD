@@ -167,9 +167,9 @@ namespace Driving_License_Issuanse_Project
         }
         private void showPersonLicenseHistoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            clsBLLicense License = clsBLLicense.GetInfoLicenseByLicenseID(LicenseID);
-            int LocalLicenseID = clsBLLocalDrivingLicenseApplications.GetLocalLicenseID(License.AppID, License.LicenseClassID);
-            LicenseHistory history = new LicenseHistory(LocalLicenseID);
+            //clsBLLicense License = clsBLLicense.GetInfoLicenseByLicenseID(LicenseID);
+            //int LocalLicenseID = clsBLLocalDrivingLicenseApplications.GetLocalLicenseID(License.AppID, License.LicenseClassID);
+            LicenseHistory history = new LicenseHistory(LicenseID);
             history.ShowDialog();
             RefreshData();
         }
